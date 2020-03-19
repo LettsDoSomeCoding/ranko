@@ -16,9 +16,21 @@ steps:
   volumes:
   - name: deps
     path: /go
+  - name: build_output
+    path: ./hello-world
   commands:
   - go build hello-world.go
 
+- name: run
+  image: golang
+  volumes: 
+  - name: build_output
+    path: ./hello-world
+  commands:
+  - ./hello-world 
+
 volumes:
 - name: deps
+  temp: {}
+- name: build_output
   temp: {}
