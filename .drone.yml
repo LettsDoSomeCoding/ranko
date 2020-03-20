@@ -27,7 +27,7 @@ steps:
   - name: build_output
     path: /output
   commands:
-  - ./hello-world 
+  - output/hello-world 
 
 volumes:
 - name: deps
