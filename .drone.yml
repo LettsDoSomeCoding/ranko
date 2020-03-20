@@ -17,15 +17,15 @@ steps:
   - name: deps
     path: /go
   - name: build_output
-    path: ./hello-world
+    path: /output
   commands:
-  - go build hello-world.go
+  - go build -o output/hello-world hello-world.go
 
 - name: run
   image: golang
   volumes: 
   - name: build_output
-    path: ./hello-world
+    path: /output
   commands:
   - ./hello-world 
 
