@@ -1,0 +1,23 @@
+
+Make/Edit/Get/Delete Competition Type
+	- score types
+	- ranking algorithm (uses score types)
+	- make default (restricted to admins)
+
+Make/Edit/Get/Delete Competition
+	- name
+	- competition type
+	- start date
+
+Make/Edit/Get/Delete Player
+	- name
+
+Add Player to Competition
+Remove Player from Competition
+
+Get Results Format
+
+Make/Edit/Get/Delete Result
+
+Get all Results
+Get all Rankings
