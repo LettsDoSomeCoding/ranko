@@ -1,12 +1,19 @@
 
-Make/Edit/Get/Delete Competition Type
-	- score types
-	- ranking algorithm (uses score types)
+Make/Edit/Get/Delete Scoring Algorithm
+	- result types
+	- ranking algorithm (uses result types)
 	- make default (restricted to admins)
+
+Get Scoring Algorithm
+
+Get Competition Type
+	- Tournament, Ladder, Round-Robin, etc...
+	- These probably won't be user generated - it feels too complicated
 
 Make/Edit/Get/Delete Competition
 	- name
-	- competition type
+	- Competition Type
+	- Scoring Algorithm
 	- start date
 
 Make/Edit/Get/Delete Player
@@ -14,8 +21,6 @@ Make/Edit/Get/Delete Player
 
 Add Player to Competition
 Remove Player from Competition
-
-Get Results Format
 
 Make/Edit/Get/Delete Result
 	- players
