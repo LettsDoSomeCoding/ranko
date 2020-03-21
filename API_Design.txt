@@ -18,6 +18,8 @@ Remove Player from Competition
 Get Results Format
 
 Make/Edit/Get/Delete Result
+	- players
+	- scores (1 for each score type and player)
 
 Get all Results
 Get all Rankings
