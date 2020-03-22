@@ -6,8 +6,14 @@ jobs:
       - image: cimg/go:1.14.1
     # working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
+      - checkout
       - run:
-          name: test
+          name: The first step
           command: | 
             echo 'Hello World!'
             echo 'This is the delivery pipeline'
+      - run:
+        name: Code Has Arrived
+        command: |
+          ls -la
+          echo '^^^That should look familiar^^^'
