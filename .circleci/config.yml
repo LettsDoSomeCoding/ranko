@@ -56,4 +56,5 @@ workflows:
       #       - I-Have-Code
       - Now-Complete:
           requires:
-            - Hold-For-Approval
+            - I-Have-Code
+            - Run-With-Node
