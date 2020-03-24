@@ -1,60 +1,59 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
 jobs:
-  Hello-World:
+  Terraform-Testing:
     docker:
-      - image: alpine:3.7
+      - image: wata727/tflint:0.15.0
     # working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
-    steps:
-      - run:
-          name: Hello World
-          command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-  I-Have-Code:
-    docker:
-      - image: alpine:3.7
     steps:
       - checkout
       - run:
-          name: Code Has Arrived
+          name: tflint
           command: |
-            ls -al
-            echo '^^^That should look familiar^^^'
-  Run-With-Node:
+            cd terraform
+            tflint
+  Terraform-Plan:
     docker:
-      - image: circleci/node:10-browsers
+      - image: hashicorp/terraform:0.12.21
     steps:
+      - checkout
       - run:
-          name: Running In A Container With Node
+          name: Plan
           command: |
-            node -v
-  Now-Complete:
+            cd terraform
+            terraform plan -out=output/planfile
+      - persist_to_workspace:
+          root: output
+          paths:
+            - planfile
+  Terraform-Apply:
     docker:
-      - image: alpine:3.7
+      - image: hashicorp/terraform:0.12.21
     steps:
+      - attach_workspace:
+          at: output
+      - checkout
       - run:
-          name: Approval Complete
+          name: Apply
           command: |
-            echo 'Do work once the approval has completed'
+            cd terraform
+            terraform apply -auto-approve planfile
 
 workflows:
   version: 2
-  Example_Workflow:
+  Terraform_Workflow:
     jobs:
-      - Hello-World
-      - I-Have-Code:
+      - Terraform-Testing
+      - Terraform-Plan:
           requires:
-            - Hello-World
-      - Run-With-Node:
+            - Terraform-Testing
+          filters:
+            branches:
+              only: master
+      - Terraform-Apply:
+          type: approval
           requires:
-            - Hello-World
-      # - Hold-For-Approval:
-      #     type: approval
-      #     requires:
-      #       - Run-With-Node
-      #       - I-Have-Code
-      - Now-Complete:
-          requires:
-            - I-Have-Code
-            - Run-With-Node
+            - Terraform-Plan
+          filters:
+            branches:
+              only: master
