@@ -1,6 +1,6 @@
 terraform {
     backend "gcs" {
-    bucket  = "opportune-lore-271620"
+    bucket  = "tf-state-ranko"
     prefix  = "terraform/state"
     }
 }
