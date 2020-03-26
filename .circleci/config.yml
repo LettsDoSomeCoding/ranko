@@ -37,7 +37,7 @@ jobs:
           name: Apply
           command: |
             cd terraform
-            terraform apply -auto-approve planfile
+            terraform apply -auto-approve output/planfile
 
 workflows:
   version: 2
