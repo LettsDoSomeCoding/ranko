@@ -14,3 +14,7 @@ resource "google_storage_bucket" "tfstate_bucket" {
       enabled = true
   }
 }
+
+resource "google_container_registry" "ranko_registry" {
+  location = "EU"
+}
