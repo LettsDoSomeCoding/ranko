@@ -27,6 +27,7 @@ jobs:
           name: Plan
           command: |
             cd terraform
+            mkdir output
             terraform plan -input=false -out=output/planfile
       - persist_to_workspace:
           root: output
