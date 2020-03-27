@@ -63,8 +63,11 @@ workflows:
           filters:
             branches:
               only: master
-      - Terraform-Apply:
+      - Terraform-Approval:
           type: approval
+          requires:
+            - Terraform-Plan
+      - Terraform-Apply:
           requires:
             - Terraform-Plan
           filters:
