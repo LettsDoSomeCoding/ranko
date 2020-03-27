@@ -10,6 +10,7 @@ import (
 
 var homePageGreeting string
 
+// StartServer starts the Ranko API server, which will run indefinitely
 func StartServer(greeting string) {
 	fmt.Println("Starting server")
 
@@ -17,7 +18,8 @@ func StartServer(greeting string) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/", homePage)
-	router.HandleFunc("/player/{id}", createPlayerHandler).Methods("POST")
+	router.HandleFunc("/player", createPlayerHandler).Methods("POST")
+	router.HandleFunc("/players", returnAllPlayers).Methods("GET")
 
 	logging.GetLogger().Fatal(http.ListenAndServe(":8443", router))
 }

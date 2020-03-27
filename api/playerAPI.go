@@ -20,6 +20,8 @@ func createPlayerHandler(w http.ResponseWriter, r *http.Request) {
 
 	var player persistence.Player
 	json.Unmarshal(reqBody, &player)
+	// ID shouldn't be provided on create. If it is, ignore it (should this be an error?)
+	player.ID = 0
 
 	result, err := player.Save()
 
@@ -29,4 +31,9 @@ func createPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(result)
+}
+
+func returnAllPlayers(w http.ResponseWriter, r *http.Request) {
+	logging.GetLogger().Print("Return All Players endpoint hit")
+	json.NewEncoder(w).Encode(persistence.GetAllPlayers())
 }

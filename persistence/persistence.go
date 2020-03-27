@@ -1,81 +1,55 @@
 package persistence
 
 import (
+	"sync"
+
 	"github.com/LettsDoSomeCoding/ranko/logging"
 )
 
 // Persistable will be implemented by any objects intended to be persisted for Ranko
 type Persistable interface {
-	GetIdentifier() string
+	getIdentifier() (id int, exists bool)
+	setIdentifier(id int)
 	Save() (Persistable, error)
-	Update() (Persistable, error)
-	SaveOrUpdate() (Persistable, error)
 }
 
-// todo - get a real database
-var playerDatabase = make([]Persistable, 0, 100)
+// todo = get a real database
+type databaseTable struct {
+	nextID   int
+	contents map[int]Persistable
+	mux      sync.Mutex
+}
 
-func save(obj Persistable) (Persistable, error) {
-	database := getDatabase(obj)
-	_, existing := findExisting(*database, obj)
-
-	if existing != nil {
-		err := ObjectAlreadyExistsError{obj}
-		logging.GetLogger().Println(err.Error())
-		return obj, err
+func (t *databaseTable) save(obj Persistable) (Persistable, error) {
+	if _, exists := obj.getIdentifier(); exists {
+		return t.update(obj)
 	}
-
-	*database = append(*database, obj)
-	return (*database)[len(*database)-1], nil
+	return t.insert(obj)
 }
 
-func update(obj Persistable) (Persistable, error) {
-	database := *getDatabase(obj)
-	index, existing := findExisting(database, obj)
+func (t *databaseTable) insert(obj Persistable) (Persistable, error) {
+	t.mux.Lock()
+	defer t.mux.Unlock()
 
-	if existing == nil {
+	id := t.nextID
+	t.nextID++
+	obj.setIdentifier(id)
+	t.contents[id] = obj
+	return t.contents[id], nil
+}
+
+func (t *databaseTable) update(obj Persistable) (Persistable, error) {
+	id, _ := obj.getIdentifier()
+
+	t.mux.Lock()
+	defer t.mux.Unlock()
+
+	if _, present := t.contents[id]; !present {
 		err := ObjectNotExistsError{obj}
 		logging.GetLogger().Println(err.Error())
 		return obj, err
 	}
 
-	database[index] = obj
-	return database[index], nil
-}
-
-func saveOrUpdate(obj Persistable) (Persistable, error) {
-	database := getDatabase(obj)
-	_, existing := findExisting(*database, obj)
-
-	var result Persistable
-	var err error
-
-	if existing == nil {
-		result, err = save(obj)
-	} else {
-		result, err = update(obj)
-	}
-
-	return result, err
-}
-
-func getDatabase(obj Persistable) *[]Persistable {
-	switch obj.(type) {
-	case Player:
-		return &playerDatabase
-	default:
-		err := UnpersistableObjectError{obj}
-		logging.GetLogger().Println(err.Error())
-		panic(err)
-	}
-}
-
-func findExisting(database []Persistable, obj Persistable) (index int, existing Persistable) {
-	for index, existing := range database {
-		if existing.GetIdentifier() == obj.GetIdentifier() {
-			return index, existing
-		}
-	}
-
-	return 0, nil
+	t.contents[id] = obj
+	return t.contents[id], nil
 }
