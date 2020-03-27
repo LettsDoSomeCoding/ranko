@@ -37,9 +37,9 @@ jobs:
     docker:
       - image: hashicorp/terraform:0.12.21
     steps:
+      - checkout
       - attach_workspace:
           at: terraform/output
-      - checkout
       - run:
           name: Initialise
           command: |
