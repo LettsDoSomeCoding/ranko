@@ -29,7 +29,7 @@ jobs:
             terraform init -input=false
       - run:
           name: Plan
-          command: terraform plan -out=output/planfile
+          command: terraform plan -input=false -out=output/planfile
       - persist_to_workspace:
           root: output
           paths:
@@ -49,7 +49,7 @@ jobs:
             terraform init -input=false
       - run:
           name: Apply
-          command: terraform apply -auto-approve output/planfile
+          command: terraform apply -input=false -auto-approve output/planfile
 
 workflows:
   version: 2
