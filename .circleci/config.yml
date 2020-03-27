@@ -25,7 +25,9 @@ jobs:
             terraform init -input=false
       - run:
           name: Plan
-          command: terraform plan -input=false -out=output/planfile
+          command: |
+            cd terraform
+            terraform plan -input=false -out=output/planfile
       - persist_to_workspace:
           root: output
           paths:
@@ -45,7 +47,9 @@ jobs:
             terraform init -input=false
       - run:
           name: Apply
-          command: terraform apply -input=false -auto-approve output/planfile
+          command: |
+            cd terraform
+            terraform apply -input=false -auto-approve output/planfile
 
 workflows:
   version: 2
