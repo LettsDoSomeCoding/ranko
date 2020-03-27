@@ -17,10 +17,6 @@ jobs:
       - image: hashicorp/terraform:0.12.21
     steps:
       - checkout
-      - persist_to_workspace:
-          root: output
-          paths:
-            - planfile
       - run:
           name: Initialise
           command: |
