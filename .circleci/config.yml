@@ -30,7 +30,7 @@ jobs:
             mkdir output
             terraform plan -input=false -out=output/planfile
       - persist_to_workspace:
-          root: output
+          root: terraform/output
           paths:
             - planfile
   Terraform-Apply:
@@ -38,7 +38,7 @@ jobs:
       - image: hashicorp/terraform:0.12.21
     steps:
       - attach_workspace:
-          at: output
+          at: terraform/output
       - checkout
       - run:
           name: Initialise
