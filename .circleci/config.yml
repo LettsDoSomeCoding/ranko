@@ -69,7 +69,7 @@ workflows:
             - Terraform-Plan
       - Terraform-Apply:
           requires:
-            - Terraform-Plan
+            - Terraform-Approval
           filters:
             branches:
               only: master
