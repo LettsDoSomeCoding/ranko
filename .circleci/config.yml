@@ -22,7 +22,7 @@ jobs:
           command: |
             echo "$GCP_CREDS_FILE" | base64 -d > /tmp/creds.json
             cd terraform
-            terraform init
+            terraform init -input=false
             terraform plan -out=output/planfile
       - persist_to_workspace:
           root: output
@@ -40,7 +40,7 @@ jobs:
           command: |
             echo "$GCP_CREDS_FILE" | base64 -d > /tmp/creds.json
             cd terraform
-            terraform init
+            terraform init -input=false
             terraform apply -auto-approve output/planfile
 
 workflows:
